@@ -1,0 +1,5 @@
+# Allow crawling
+User-agent: *
+Allow: /
+
+Sitemap: https://ritomiswelfare.org/sitemap.txt
