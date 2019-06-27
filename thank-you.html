@@ -92,7 +92,7 @@
 
 </section>
 
-<section>
+<section style="padding-bottom: 2rem;">
     <div class="container">
         <div class="row justify-content-between">
             <div class="col-lg-6">
@@ -148,68 +148,35 @@
     </div>
 </section>
 
-<section id="cashbook" style="padding-top: 0;" class="bg-primary-alt o-hidden has-divider">
-    <div class="container">
+<section id="cashbook" style="padding-top: 1rem;" class="bg-primary-alt o-hidden has-divider">
+    <div class="container" style="padding-top: 2rem;">
             <div class="row text-center justify-content-center align-items-center mb-2">
                 <div class="col">
-                    <h2>Accounts book</h2>
+                    <h2>Contributions</h2>
                 </div>
-            </div>
-
-            <div class="row text-center justify-content-center align-items-center mb-3">
-            <div class="col-auto">
-                <ul class="nav" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link btn active" href="#day-one" id="day-one-tab" data-toggle="tab" aria-controls="day-one" role="tab" aria-selected="true">Contributions</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn" href="#day-two" id="day-two-tab" data-toggle="tab" aria-controls="day-two" role="tab" aria-selected="false">Expenses</a>
-                    </li>
-                </ul>
-            </div>
             </div>
 
         <!-- Contributions -->
         <div class="tab-content aos-init aos-animate" data-aos="fade-up">
 
-            <div id="day-one" class="list-group list-group-flush tab-pane fade active show" role="tabpanel" aria-labelledby="day-one-tab">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th scope="col" width="5%" class="align-middle">#</th>
-                        <th scope="col" class="align-middle">Contributor name</th>
-                        <th scope="col" width="30%" class="text-right align-middle">Date</th>
-                        <th scope="col" width="20%" class="text-right align-middle">Amount</th>
-                    </tr>
-                    </thead>
-                    <tbody id="donation_entries">
-                    </tbody>
-                    <thead id="donation_entries_total">
-                    </thead>
-                </table>
-            </div>
-
-            <!-- Expenses -->
-            <div id="day-two" class="list-group list-group-flush tab-pane fade" role="tabpanel" aria-labelledby="day-two-tab">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th scope="col" width="5%" class="align-middle">#</th>
-                        <th scope="col" class="align-middle">Expense head</th>
-                        <th scope="col" width="30%" class="text-right align-middle">Date</th>
-                        <th scope="col" width="20%" class="text-right align-middle">Amount</th>
-                    </tr>
-                    </thead>
-                    <tbody id="expense_entries">
-                    </tbody>
-                    <thead id="expense_entries_total">
-                    </thead>
-                </table>
-            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col" width="5%" class="align-top">#</th>
+                    <th scope="col" class="align-top">Contributor name</th>
+                    <th scope="col" width="25%" class="text-right align-top">Date</th>
+                    <th scope="col" width="30%" class="text-right align-top">Amount (₹)</th>
+                </tr>
+                </thead>
+                <tbody id="donation_entries">
+                </tbody>
+                <thead id="donation_entries_total">
+                </thead>
+            </table>
 
         </div>
-        <br><br>
-        <span class="text-muted">You can also refer to <a href="https://github.com/ritomiswelfare/cashbooks/blob/master/cashbook.csv" target="_blank">this link</a> for details.</span>
+        <br>
+        <span class="text-muted">You can also refer <a href="https://github.com/ritomiswelfare/cashbooks/blob/master/cashbook.csv" target="_blank">this link</a> for more details on contributions and expenses.</span>
     </div>
 
     <div class="divider bg-primary-3 flip-y">
@@ -418,13 +385,9 @@
 
     function process_account_book_data(response) {
         let donations = response.donors,
-            expenses = response.expenses,
             count_donations = donations.length,
-            count_expenses = expenses.length,
             donation_list_html = "",
-            expense_list_html = "",
-            sum_donations = 0,
-            sum_expenses = 0;
+            sum_donations = 0;
 
         for (let counter = 0; counter < count_donations; counter++) {
             if (donations[counter].head === "HEADER")
@@ -440,37 +403,17 @@
             sum_donations += Number(donations[counter].amount);
         }
 
-        for (let counter = 0; counter < count_expenses; counter++) {
-
-            expense_list_html += '<tr>\n' +
-                '                        <th scope="row">' + eval("counter+1") + '</th>\n' +
-                '                        <td><span style="text-transform: capitalize">' + expenses[counter].name + '</span><br><span class="text-muted small">' + expenses[counter].head + '</span></td>\n' +
-                '                        <td class="text-right">' + format_date(expenses[counter].date) + '</td>\n' +
-                '                        <td class="text-right">' + format_number(expenses[counter].amount) + '</td>\n' +
-                '                    </tr>';
-
-            sum_expenses += Number(donations[counter].amount);
-        }
-
         $("#donation_entries").html(donation_list_html);
-        $("#expense_entries").html(expense_list_html);
 
         // Add Total Rows
         // Add Total
         let total_row_donation = '<tr>\n' +
             '                        <th scope="col" colspan="2">Total contribution</th>\n' +
             '                        <th scope="col"></th>\n' +
-            '                        <th scope="col" class="text-right">' + format_number(sum_donations) + '</th>\n' +
-            '                    </tr>\n';
-
-        let total_row_expense = '<tr>\n' +
-            '                        <th scope="col" colspan="2">Total expense</th>\n' +
-            '                        <th scope="col"></th>\n' +
-            '                        <th scope="col" class="text-right">' + format_number(sum_expenses) + '</th>\n' +
+            '                        <th scope="col" class="text-right"> ₹ ' + format_number(sum_donations) + '</th>\n' +
             '                    </tr>\n';
 
         $("#donation_entries_total").html(total_row_donation);
-        $("#expense_entries_total").html(total_row_expense);
 
         // Update total contribution
         $("#total_contribution_amount").html(format_number(sum_donations));
