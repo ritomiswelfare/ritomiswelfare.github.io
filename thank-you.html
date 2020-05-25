@@ -377,7 +377,7 @@
 
     function get_account_book() {
         $.ajax({
-            url: "https://msd.ritomis.org/getDonation",
+            url: "https://apis.ritomis.org/getDonation",
             data: JSON.stringify({auth: 'getDonationListForRitomisWelfare'}),
             type: "POST",
             success: function (response) {
